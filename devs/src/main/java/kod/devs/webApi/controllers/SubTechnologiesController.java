@@ -45,4 +45,5 @@ public class SubTechnologiesController {
 	public void update(@RequestBody UpdateSubTechnologyRequest updateSubTechnologyRequest) throws Exception{
 		_subTechnologyService.update(updateSubTechnologyRequest);
 	}
+	//git deneme
 }
