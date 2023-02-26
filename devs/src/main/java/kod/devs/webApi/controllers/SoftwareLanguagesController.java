@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kod.devs.business.abstracts.SoftwareLanguageService;
-import kod.devs.entities.concretes.SoftwareLanguage;
+import kod.devs.business.requests.CreateSoftwareLanguageRequest;
+import kod.devs.business.requests.UpdateSoftwareLanguageRequest;
+import kod.devs.business.responses.GetAllSoftwareLanguagesResponse;
+import kod.devs.business.responses.GetByIdSoftwareLanguageResponse;
 
 @RestController
 @RequestMapping("/api/softwarelanguages")
@@ -23,24 +26,24 @@ public class SoftwareLanguagesController {
 	}
 	
 	@GetMapping("/getall")
-	public List<SoftwareLanguage> getAll() {
+	public List<GetAllSoftwareLanguagesResponse> getAll() {
 		return _softwareLanguageService.getAll();
 	}
 	@GetMapping("/getbyid")
-	public SoftwareLanguage getById(int id) {
+	public GetByIdSoftwareLanguageResponse getById(int id) {
 		return _softwareLanguageService.getById(id);
 	}
 	@PostMapping("/add")
-	public void add(SoftwareLanguage softwareLanguage) throws Exception {
-		_softwareLanguageService.add(softwareLanguage);
+	public void add(CreateSoftwareLanguageRequest createSoftwareLanguageRequest) throws Exception {
+		_softwareLanguageService.add(createSoftwareLanguageRequest);
 	}
 	@PostMapping("/delete")
-	public void delete(SoftwareLanguage softwareLanguage) {
-		_softwareLanguageService.delete(softwareLanguage);
+	public void delete(int id) {
+		_softwareLanguageService.delete(id);
 	}
 	@PostMapping("/update")
-	public void update(SoftwareLanguage softwareLanguage) throws Exception{
-		_softwareLanguageService.update(softwareLanguage);
+	public void update(UpdateSoftwareLanguageRequest updateSoftwareLanguageRequest) throws Exception{
+		_softwareLanguageService.update(updateSoftwareLanguageRequest);
 	}
 
 }

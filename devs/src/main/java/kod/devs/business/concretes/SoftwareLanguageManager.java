@@ -1,11 +1,16 @@
 package kod.devs.business.concretes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kod.devs.business.abstracts.SoftwareLanguageService;
+import kod.devs.business.requests.CreateSoftwareLanguageRequest;
+import kod.devs.business.requests.UpdateSoftwareLanguageRequest;
+import kod.devs.business.responses.GetAllSoftwareLanguagesResponse;
+import kod.devs.business.responses.GetByIdSoftwareLanguageResponse;
 import kod.devs.dataAccess.abstracts.SoftwareLanguageRepository;
 import kod.devs.entities.concretes.SoftwareLanguage;
 
@@ -20,46 +25,62 @@ public class SoftwareLanguageManager implements SoftwareLanguageService{
 	}
 
 	@Override
-	public void add(SoftwareLanguage softwareLanguage) throws Exception {
-		if(softwareLanguage.getName().isEmpty()) {
+	public void add(CreateSoftwareLanguageRequest createSoftwareLanguageRequest) throws Exception {
+		if(createSoftwareLanguageRequest.getName().isEmpty()) {
 			throw new Exception("İsim boş bırakılamaz");
 		}
-		for(SoftwareLanguage language:getAll()) {
-			if(softwareLanguage.getName().equals(language.getName())) {
+		for(GetAllSoftwareLanguagesResponse language:getAll()) {
+			if(createSoftwareLanguageRequest.getName().equals(language.getName())) {
 				throw new Exception("İsimler tekrar edemez");
 			}
 		}
-		_softwareLanguageRepository.add(softwareLanguage);
+		SoftwareLanguage softwareLanguage = new SoftwareLanguage();
+		softwareLanguage.setName(createSoftwareLanguageRequest.getName());
+		_softwareLanguageRepository.save(softwareLanguage);
 	}
 
 	@Override
-	public void delete(SoftwareLanguage softwareLanguage) {
-		_softwareLanguageRepository.delete(softwareLanguage);
+	public void delete(int id) {
+		_softwareLanguageRepository.deleteById(id);
 		
 	}
 
 	@Override
-	public void update(SoftwareLanguage softwareLanguage) throws Exception{
-		if(softwareLanguage.getName().isEmpty()) {
+	public void update(UpdateSoftwareLanguageRequest updateSoftwareLanguageRequest) throws Exception{
+		if(updateSoftwareLanguageRequest.getName().isEmpty()) {
 			throw new Exception("İsim boş bırakılamaz");
 		}
-		for(SoftwareLanguage language:getAll()) {
-			if(softwareLanguage.getName().equals(language.getName())) {
+		for(GetAllSoftwareLanguagesResponse language:getAll()) {
+			if(updateSoftwareLanguageRequest.getName().equals(language.getName())) {
 				throw new Exception("İsimler tekrar edemez");
 			}
 		}
-		_softwareLanguageRepository.update(softwareLanguage);
+		SoftwareLanguage language=_softwareLanguageRepository.findById(updateSoftwareLanguageRequest.getId()).get();
+		language.setName(updateSoftwareLanguageRequest.getName());
+		_softwareLanguageRepository.save(language);
 		
 	}
 
 	@Override
-	public List<SoftwareLanguage> getAll() {
-		return _softwareLanguageRepository.getAll();
+	public List<GetAllSoftwareLanguagesResponse> getAll() {
+		List<SoftwareLanguage> languages=_softwareLanguageRepository.findAll();
+		List<GetAllSoftwareLanguagesResponse> responses=new ArrayList<GetAllSoftwareLanguagesResponse>();
+		
+		for(SoftwareLanguage language:languages) {
+			GetAllSoftwareLanguagesResponse responseItem= new GetAllSoftwareLanguagesResponse();
+			responseItem.setId(language.getId());
+			responseItem.setName(language.getName());
+			responses.add(responseItem);
+		}
+		return responses;
 	}
 	
 	@Override
-	public SoftwareLanguage getById(int id) {
-		return _softwareLanguageRepository.getById(id);
+	public GetByIdSoftwareLanguageResponse getById(int id) {
+		SoftwareLanguage language = _softwareLanguageRepository.findById(id).get();
+		GetByIdSoftwareLanguageResponse response= new GetByIdSoftwareLanguageResponse();
+		response.setName(language.getName());
+		return response;
 	}
 
 }

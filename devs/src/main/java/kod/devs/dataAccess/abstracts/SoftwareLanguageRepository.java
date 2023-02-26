@@ -1,14 +1,9 @@
 package kod.devs.dataAccess.abstracts;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import kod.devs.entities.concretes.SoftwareLanguage;
 
-public interface SoftwareLanguageRepository {
-	void add(SoftwareLanguage softwareLanguage);
-	void delete(SoftwareLanguage softwareLanguage);
-	void update(SoftwareLanguage softwareLanguage);
-	List<SoftwareLanguage> getAll();
-	SoftwareLanguage getById(int id);
+public interface SoftwareLanguageRepository extends JpaRepository<SoftwareLanguage, Integer>{
 
 }
